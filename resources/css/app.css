@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.hero-content {
+    z-index: unset;
+}
+
+.menu {
+    z-index: 9000;
+}
+
+.site-layout {
+    z-index: unset;
+}
+
+#headlessui-menu-items- {
+    z-index: 9000;
+    position: absolute;
+    top: 0;
+}
+
+tr,
+td {
+    @apply px-4 py-2;
+}
+
+th {
+    @apply text-left py-3 px-4;
+}
+
+.input {
+    @apply py-1 px-3 h-[2.8rem] border-slate-200 rounded-md;
+}
+
+.btn {
+    @apply min-h-[2.8rem];
+    @apply h-[2.8rem];
+}
+
+#wallet-balance {
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif !important;
+    font-weight: 900 !important;
+    font-size: xx-large;
+}
