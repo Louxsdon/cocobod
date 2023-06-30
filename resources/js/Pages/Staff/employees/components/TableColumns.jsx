@@ -1,7 +1,7 @@
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-import { DeleteButton, EditButton } from "@/Components/Buttons";
+import { DeleteButton, EditButton, ViewButton } from "@/Components/Buttons";
 import { Button } from "@/Components/ui/button";
 import { router } from "@inertiajs/react";
 import { TbArrowsUpDown } from "react-icons/tb";
@@ -12,7 +12,7 @@ export const columns = [
         header: "User ID",
     },
     {
-        accessorKey: "name",
+        accessorKey: "user",
         header: ({ column }) => {
             return (
                 <Button
@@ -26,9 +26,18 @@ export const columns = [
                 </Button>
             );
         },
+        cell: ({ cell }) => {
+            const employee = cell.row.original;
+            console.log(employee);
+            return (
+                <div className="flex items-center space-x-2 w-2/3">
+                    {employee.user.name}
+                </div>
+            );
+        },
     },
     {
-        accessorKey: "email",
+        accessorKey: "user.email",
         header: ({ column }) => {
             return (
                 <Button
@@ -44,14 +53,22 @@ export const columns = [
         },
     },
     {
-        accessorKey: "phone",
+        accessorKey: "user.phone",
         header: "Phone",
+    },
+    {
+        accessorKey: "job_title",
+        header: "Job",
+    },
+    {
+        accessorKey: "department.name",
+        header: "Department",
     },
     {
         accessorKey: "actions",
         header: "Actions",
         cell: ({ cell }) => {
-            const user = cell.row.original;
+            const employee = cell.row.original;
             return (
                 <div className="flex items-center space-x-2 w-2/3">
                     <DeleteButton
@@ -60,13 +77,18 @@ export const columns = [
                                 "Are you sure you want to delete this item?"
                             ) &&
                                 router.delete(
-                                    route("admin.users.destroy", {
-                                        user: user.id,
+                                    route("admin.employees.destroy", {
+                                        employee: employee.id,
                                     })
                                 );
                         }}
                     />
-                    <EditButton href={route("admin.users.edit", user.id)} />
+                    <EditButton
+                        href={route("admin.employees.edit", employee.id)}
+                    />
+                    <ViewButton
+                        href={route("admin.employees.show", employee.id)}
+                    />
                 </div>
             );
         },

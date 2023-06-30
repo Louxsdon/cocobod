@@ -16,21 +16,21 @@ export default function FooterSmall(props) {
                             <div className="text-sm text-blueGray-500 font-semibold py-1 text-center md:text-left">
                                 Copyright © {new Date().getFullYear()}{" "}
                                 <a
-                                    href="https://www.creative-tim.com?ref=nr-footer-small"
+                                    href="#"
                                     className="text-white hover:text-blueGray-300 text-sm font-semibold py-1"
                                 >
-                                    Creative Tim
+                                    HTU Project
                                 </a>
                             </div>
                         </div>
-                        <div className="w-full md:w-8/12 px-4">
+                        {/* <div className="w-full md:w-8/12 px-4">
                             <ul className="flex flex-wrap list-none md:justify-end  justify-center">
                                 <li>
                                     <a
                                         href="https://www.creative-tim.com?ref=nr-footer-small"
                                         className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
                                     >
-                                        Creative Tim
+                                        HTU Project
                                     </a>
                                 </li>
                                 <li>
@@ -58,7 +58,7 @@ export default function FooterSmall(props) {
                                     </a>
                                 </li>
                             </ul>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </footer>

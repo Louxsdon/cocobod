@@ -2,6 +2,7 @@ import "./bootstrap";
 import "../css/tailwind.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../css/app.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import { createRoot } from "react-dom/client";
 import { createInertiaApp } from "@inertiajs/react";
@@ -9,6 +10,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 
 import Admin from "./Layouts/AdminLayout";
 import Auth from "./Layouts/AuthLayout";
+import StaffLayout from "./Layouts/StaffLayout";
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
@@ -24,6 +26,11 @@ createInertiaApp({
         name.startsWith("Admin/") &&
             (page.default.layout =
                 page.default?.layout || ((page) => <Admin children={page} />));
+
+        name.startsWith("Staff/") &&
+            (page.default.layout =
+                page.default?.layout ||
+                ((page) => <StaffLayout children={page} />));
         page.default.layout =
             page.default?.layout || ((page) => <Auth children={page} />);
         return page;

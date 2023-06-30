@@ -11,6 +11,12 @@ use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\Staff\AppointmentController;
+use App\Http\Controllers\Staff\AppraisalController;
+use App\Http\Controllers\Staff\IndexController;
+use App\Http\Controllers\Staff\LeaveController as StaffLeaveController;
+use App\Http\Controllers\Staff\MedicalsController;
+use App\Http\Controllers\Staff\QualificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,9 +47,11 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth', 'verified'])->prefix('/admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin|super-admin'])->prefix('/admin')->name('admin.')->group(function () {
     Route::resource('users', UserController::class);
-
+    Route::post('users/{user}/roles', [UserController::class, 'syncRoles'])->name('users.roles');
+    Route::post('users/{user}/permissions', [UserController::class, 'syncPermissions'])
+        ->name('users.permissions');
     Route::get('dashboard', function () {
         return Inertia::render('Admin/Dashboard');
     });
@@ -53,7 +61,11 @@ Route::middleware(['auth', 'verified'])->prefix('/admin')->name('admin.')->group
 
     Route::resource('employees', EmployeeController::class);
 
-    Route::resource('leaves', LeaveController::class);
+    Route::resource('leaves', LeaveController::class)->parameter("leaf", "leave");
+    Route::post('leaves/{leave}/reject', [LeaveController::class, "reject"])->name("leaves.reject");
+    Route::post('leaves/{leave}/approve', [LeaveController::class, "approve"])->name("leaves.approve");
+
+    Route::resource('appraisals', LeaveController::class);
 
     // roles and permissions
     Route::resource('roles', RoleController::class);
@@ -63,6 +75,17 @@ Route::middleware(['auth', 'verified'])->prefix('/admin')->name('admin.')->group
 
     Route::get('authorizations', [AuthorizationController::class, 'index'])
         ->name('authorizations.index');
+});
+
+Route::middleware(['auth', 'verified', 'role:staff|employee'])->prefix('/staff')->name('staff.')->group(function () {
+    Route::get('dashboard', [IndexController::class, "index"])->name("dashboard");
+
+    Route::resource('leaves', StaffLeaveController::class)->parameter("leaf", "leave");
+
+    Route::resource('appraisals', AppraisalController::class);
+    Route::resource('qualifications', QualificationController::class);
+    Route::resource('medicals', MedicalsController::class);
+    Route::resource('appointments', AppointmentController::class);
 });
 
 Route::middleware('auth')->group(function () {

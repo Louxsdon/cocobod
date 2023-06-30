@@ -112,6 +112,27 @@ export default function Sidebar() {
                             <SidebarLink href="/leaves" icon="fas fa-folder">
                                 Manage Leaves
                             </SidebarLink>
+                            <SidebarLink
+                                href="/appraisals"
+                                icon="fas fa-folder"
+                            >
+                                Appraisals
+                            </SidebarLink>
+                            <SidebarLink href="/medicals" icon="fas fa-folder">
+                                Medical Records
+                            </SidebarLink>
+                            <SidebarLink
+                                href="/qualifications"
+                                icon="fas fa-folder"
+                            >
+                                Qualifications
+                            </SidebarLink>
+                            <SidebarLink
+                                href="/appointments"
+                                icon="fas fa-folder"
+                            >
+                                Appointments
+                            </SidebarLink>
                         </ul>
 
                         <hr className="my-4 md:min-w-full" />
@@ -141,7 +162,7 @@ export default function Sidebar() {
                             <li className="items-center">
                                 <Link
                                     className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                                    href="/dashboard//auth/login"
+                                    href="/auth/login"
                                 >
                                     <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
                                     Login
@@ -151,10 +172,12 @@ export default function Sidebar() {
                             <li className="items-center">
                                 <Link
                                     className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                                    href="/dashboard//auth/register"
+                                    href={route("logout")}
+                                    method="post"
+                                    as="button"
                                 >
                                     <i className="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i>{" "}
-                                    Register
+                                    Logout
                                 </Link>
                             </li>
                         </ul>
@@ -186,6 +209,7 @@ function SidebarLink({ children, href, icon = "" }) {
                             : " text-blueGray-300")
                     }
                 ></i>{" "}
+                {/* <Icon className="inline-block lg:mr-2" /> */}
                 {children}
             </Link>
         </li>

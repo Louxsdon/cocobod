@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
+use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Route;
+use App\Providers\RouteServiceProvider;
+use App\Http\Requests\Auth\LoginRequest;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -30,9 +31,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
 
-        $request->session()->regenerate();
+        if ($request->authenticate()) {
+            $auth_user = User::where("email", $request->email)->first();
+            $request->session()->regenerate();
+
+            if ($auth_user->hasAnyRole(["super-admin", 'admin'])) {
+                return redirect()->intended("/admin/dashboard");
+            } else if ($auth_user->hasAnyRole(["staff", 'employee'])) {
+                return redirect()->intended(route("staff.dashboard"));
+            }
+            return redirect()->back()->with("message", "Sorry this account don't have permission to access this site!");
+        };
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

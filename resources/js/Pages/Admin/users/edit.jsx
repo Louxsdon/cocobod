@@ -4,6 +4,7 @@ import AuthLayout from "@/Layouts/AuthLayout";
 import Input from "@/Components/Input";
 import { useForm, router } from "@inertiajs/react";
 import SelectInput from "@/Components/SelectInput";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 
 export default function EditUser({
     auth,
@@ -56,7 +57,7 @@ export default function EditUser({
 
     return (
         <>
-            <div className="p-5 dark bg-white w-2/4 mx-auto mt-24 shadow-sm rounded-lg">
+            <div className="p-5 dark bg-white w-2/4 mx-auto mt-16 shadow-sm rounded-lg">
                 <p className="text-xl font-semibold">Update User Account</p>
                 <hr className="my-2" />
                 {/* Form section */}
@@ -98,12 +99,22 @@ export default function EditUser({
                     </div>
                 </form>
             </div>
-
-            {/* Roles and User Roles */}
-            <Roles user={user} roles={roles} />
-
-            {/* ================ Permissions ============*/}
-            <Permissions user={user} permissions={permissions} />
+            <div className="p-5 dark bg-white w-2/4 mx-auto mt-5 shadow-sm rounded-lg">
+                <Tabs defaultValue="account" className="">
+                    <TabsList>
+                        <TabsTrigger value="account">Roles</TabsTrigger>
+                        <TabsTrigger value="password">Permissions</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="account">
+                        {/* Roles and User Roles */}
+                        <Roles user={user} roles={roles} />
+                    </TabsContent>
+                    <TabsContent value="password">
+                        {/* ================ Permissions ============*/}
+                        <Permissions user={user} permissions={permissions} />
+                    </TabsContent>
+                </Tabs>
+            </div>
         </>
     );
 }
@@ -172,13 +183,13 @@ export function Roles({ user = {}, roles: all_roles = [], user_roles = [] }) {
 
     return (
         //  ================ Roles ============*
-        <div className="p-5 dark bg-white w-2/4 mx-auto mt-4 shadow-sm rounded-lg">
+        <div className="p-5 dark bg-white w-full mt-4 shadow-sm rounded-lg">
             <p className="text-lg font-semibold">Assign User Roles</p>
 
             <hr className=" my-2" />
             {/* Form section */}
             <form onSubmit={(e) => e.preventDefault()}>
-                <section className="flex space-x-2">
+                <section className="flex justify-between space-x-2">
                     <div className="w-full">
                         <SelectInput
                             name="roles"
@@ -310,7 +321,7 @@ export function Permissions({ user = {}, permissions: all_permissions = [] }) {
 
     return (
         //  ================ Roles ============*
-        <div className="p-5 dark bg-white w-2/4 mx-auto mt-4 shadow-sm rounded-lg">
+        <div className="p-5 dark bg-white mx-auto mt-4 shadow-sm rounded-lg">
             <p className="text-lg font-semibold">Assign User Permissions</p>
 
             <hr className=" my-2" />
@@ -322,7 +333,7 @@ export function Permissions({ user = {}, permissions: all_permissions = [] }) {
                             label="Permissions"
                             error={errors}
                             placeholder="Enter permission name"
-                            containerClassName="!w-full"
+                            className="!w-full min-h-96"
                             multiple={true}
                             onChange={onAddPermissionChange}
                         >

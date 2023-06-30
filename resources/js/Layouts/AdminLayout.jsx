@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // components
 
@@ -6,12 +6,25 @@ import AdminNavbar from "@/Components/Navbars/AdminNavbar.jsx";
 import Sidebar from "@/Components/Sidebar/Sidebar.jsx";
 import HeaderStats from "@/Components/Headers/HeaderStats.jsx";
 import FooterAdmin from "@/Components/Footers/FooterAdmin.jsx";
+import { ToastContainer, toast } from "react-toastify";
+import { usePage } from "@inertiajs/react";
 
 // views
 
 export default function Admin({ children }) {
+    const { flash } = usePage().props;
+    useEffect(() => {
+        if (flash.message) {
+            toast(flash.message.text, {
+                type: flash.message.status ? flash.message.status : "success",
+                theme: "colored",
+            });
+        }
+    }, [flash.message]);
+
     return (
         <>
+            <ToastContainer />
             <Sidebar />
             <div className="relative md:ml-64 bg-blueGray-100">
                 <AdminNavbar />

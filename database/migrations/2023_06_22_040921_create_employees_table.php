@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email');
-            $table->string('phone');
+            $table->enum('gender', ['male', 'female']);
+            $table->date('date_of_birth')->nullable();
+            $table->string('job_title');
+            $table->string('address')->nullable();
+            $table->date('hired_on');
+            $table->text('bio')->nullable();
             $table->string('photo')->nullable();
             $table->foreignId('department_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();

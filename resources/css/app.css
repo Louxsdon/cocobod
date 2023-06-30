@@ -37,9 +37,3 @@ th {
     @apply min-h-[2.8rem];
     @apply h-[2.8rem];
 }
-
-#wallet-balance {
-    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif !important;
-    font-weight: 900 !important;
-    font-size: xx-large;
-}

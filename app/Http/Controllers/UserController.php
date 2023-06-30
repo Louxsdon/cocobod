@@ -142,7 +142,7 @@ class UserController extends Controller
         ]);
         $user->syncRoles($validate);
 
-        return redirect(route("admin.users.edit", $user));
+        return redirect()->back();
     }
 
     public function syncPermissions(Request $request, User $user)
@@ -152,6 +152,6 @@ class UserController extends Controller
         ]);
         $user->syncPermissions($validate);
 
-        return redirect(route("admin.users.edit", $user));
+        return redirect()->back();
     }
 }
