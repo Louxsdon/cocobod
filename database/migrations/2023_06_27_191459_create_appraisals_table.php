@@ -36,7 +36,7 @@ return new class extends Migration
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->foreignId("department_id")->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId("reviewer_id")->nullable()->constrained("users")->cascadeOnDelete();
-            $table->enum("status", ["pending", "submitted", "reviewed", "rejected", "approved"]);
+            $table->enum("status", ["submitted", "reviewed", "rejected", "approved"]);
             $table->string("rejected_reason")->nullable();
             $table->boolean("visible")->nullable();
             $table->timestamps();
