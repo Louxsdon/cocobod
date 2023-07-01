@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Models\Department;
 
 class AppointmentController extends Controller
 {
@@ -12,7 +13,8 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        //
+        $appointments = Appointment::with("department", "user")->orderBy("created_at", "desc")->get();
+        return inertia("Admin/appointments/index", compact("appointments"));
     }
 
     /**
@@ -20,7 +22,8 @@ class AppointmentController extends Controller
      */
     public function create()
     {
-        //
+        $departments = Department::all();
+        return inertia("Admin/appointments/create", compact("departments"));
     }
 
     /**
@@ -28,7 +31,22 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "date" => "required|date",
+            "time" => "required|string:max:10",
+            "department" => "required|exists:departments,id",
+            "comments" => "nullable|string|max:255",
+        ]);
+
+        Appointment::create([
+            "date" => $request->date,
+            "time" => $request->time,
+            "department_id" => $request->department,
+            "comments" => $request->comments,
+            "user_id" => request()->user()->id
+        ]);
+
+        return to_route("Admin.appointments.index")->with('message', ["text" => "Appointment booked successfully!"]);
     }
 
     /**
@@ -44,7 +62,8 @@ class AppointmentController extends Controller
      */
     public function edit(Appointment $appointment)
     {
-        //
+        $departments = Department::all();
+        return inertia("Admin/appointments/edit", compact("appointment", "departments"));
     }
 
     /**
@@ -52,7 +71,21 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, Appointment $appointment)
     {
-        //
+        $request->validate([
+            "date" => "required|date",
+            "time" => "required|string:max:10",
+            "department" => "required|exists:departments,id",
+            "comments" => "nullable|string|max:255",
+        ]);
+
+        $appointment->update([
+            "date" => $request->date,
+            "time" => $request->time,
+            "department_id" => $request->department,
+            "comments" => $request->comments,
+        ]);
+
+        return to_route("Admin.appointments.index")->with('message', ["text" => "Appointment re-scheduled successfully!"]);
     }
 
     /**
@@ -60,6 +93,7 @@ class AppointmentController extends Controller
      */
     public function destroy(Appointment $appointment)
     {
-        //
+        $appointment->delete();
+        return redirect()->back()->with('message', ["text" => "Appointment deleted successfully!"]);
     }
 }
