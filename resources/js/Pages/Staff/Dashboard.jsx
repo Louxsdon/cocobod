@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 export default function Dashboard({ user }) {
     console.log(user);
     return (
-        <div className="max-w-6xl mx-auto p-5 space-y-5">
+        <div className="max-w-6xl mx-auto p-5 space-y-5 bg-whit">
             <div className=" mb-5 ">
                 <h3 className="text-3xl capitalize text-slate-500">
                     Welcome to your dashboard area

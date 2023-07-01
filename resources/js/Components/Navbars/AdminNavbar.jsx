@@ -31,7 +31,7 @@ export default function Navbar() {
                     </form>
                     {/* User */}
                     <ul className="flex-col md:flex-row list-none items-center hidden md:flex">
-                        <UserDropdown />
+                        {/* <UserDropdown /> */}
                     </ul>
                 </div>
             </nav>

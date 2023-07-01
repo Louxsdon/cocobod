@@ -5,6 +5,7 @@ import { columns } from "./partials/TableColumns";
 import { Link } from "@inertiajs/react";
 
 export default function Users({ appraisals = [] }) {
+    console.log(appraisals);
     return (
         <>
             <div className="my-12 container mx-auto">
@@ -14,13 +15,13 @@ export default function Users({ appraisals = [] }) {
                             <h3 className="font-bold text-xl text-slate-600">
                                 My Appraisals
                             </h3>
-                            {/* <Link
-                                href={route("admin.leaves.create")}
+                            <Link
+                                href={route("staff.appraisals.create")}
                                 className="btn btn-primary flex items-center"
                             >
                                 <FaPlus className="mr-2 inline-block" />
-                                Leave Request
-                            </Link> */}
+                                Fill Appraisal
+                            </Link>
                         </div>
 
                         <DataTable columns={columns} data={appraisals} />

@@ -4,6 +4,7 @@
 import { DeleteButton, EditButton, ViewButton } from "@/Components/Buttons";
 import { Button } from "@/Components/ui/button";
 import { router } from "@inertiajs/react";
+import dayjs from "dayjs";
 import { BiCheckCircle } from "react-icons/bi";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { MdCancel, MdOutlinePending, MdPending } from "react-icons/md";
@@ -15,28 +16,20 @@ export const columns = [
         header: "ID",
     },
     {
-        accessorKey: "heading",
-        header: "Heading",
-    },
-    {
-        accessorKey: "reason",
-        header: "Reason",
-    },
-    {
-        accessorKey: "from",
-        header: "From",
-    },
-    {
-        accessorKey: "to",
-        header: "To",
-    },
-    {
-        accessorKey: "type",
-        header: "Type",
+        accessorKey: "created_at",
+        header: "Appraisal for",
+        cell: ({ cell }) => {
+            const data = cell.row.original;
+            return (
+                <div className="flex items-center space-x-2 w-2/3">
+                    {dayjs(data.created_at).format("MMMM YYYY")}
+                </div>
+            );
+        },
     },
     {
         accessorKey: "user.name",
-        header: "Request By",
+        header: "Submitted By",
         cell: ({ cell }) => {
             const data = cell.row.original;
             return (
@@ -52,16 +45,26 @@ export const columns = [
         cell: ({ cell }) => {
             const data = cell.row.original;
             return (
-                <div
-                    title={data.status}
-                    className="text-2xl flex justify-center items-center"
-                >
+                <div title={data.status} className="">
                     {data.status === "approved" ? (
-                        <BiCheckCircle className="text-green-400" />
+                        <div className="flex items-center capitalize space-x-2">
+                            <BiCheckCircle className="text-xl text-green-500" />
+                            <span className=" text-green-500">
+                                {data.status}
+                            </span>
+                        </div>
                     ) : data.status === "rejected" ? (
-                        <IoCloseCircleOutline className="text-red-400" />
+                        <div className="flex items-center capitalize space-x-2">
+                            <IoCloseCircleOutline className="text-xl text-red-500" />
+                            <span className=" text-red-500">{data.status}</span>
+                        </div>
                     ) : (
-                        <MdOutlinePending className="text-blue-400" />
+                        <div className="flex items-center capitalize space-x-2">
+                            <MdOutlinePending className="text-xl text-blue-500" />
+                            <span className=" text-blue-500">
+                                {data.status}
+                            </span>
+                        </div>
                     )}
                 </div>
             );
@@ -74,18 +77,22 @@ export const columns = [
             const data = cell.row.original;
             return (
                 <div className="flex items-center space-x-2 w-2/3">
-                    <DeleteButton
+                    {/* <DeleteButton
                         onClick={() => {
                             confirm(
                                 "Are you sure you want to delete this item?"
                             ) &&
                                 router.delete(
-                                    route("admin.leaves.destroy", data.id)
+                                    route("staff.appraisals.destroy", data.id)
                                 );
                         }}
+                    /> */}
+                    <EditButton
+                        href={route("staff.appraisals.edit", data.id)}
                     />
-                    <EditButton href={route("admin.leaves.edit", data.id)} />
-                    <ViewButton href={route("admin.leaves.show", data.id)} />
+                    <ViewButton
+                        href={route("staff.appraisals.show", data.id)}
+                    />
                 </div>
             );
         },

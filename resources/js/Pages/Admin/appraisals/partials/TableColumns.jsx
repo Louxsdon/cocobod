@@ -35,18 +35,6 @@ export const columns = [
         header: "Type",
     },
     {
-        accessorKey: "user.name",
-        header: "Request By",
-        cell: ({ cell }) => {
-            const data = cell.row.original;
-            return (
-                <div className="flex items-center space-x-2 w-2/3">
-                    {data.user.name}
-                </div>
-            );
-        },
-    },
-    {
         accessorKey: "status",
         header: "Status",
         cell: ({ cell }) => {
@@ -80,12 +68,16 @@ export const columns = [
                                 "Are you sure you want to delete this item?"
                             ) &&
                                 router.delete(
-                                    route("admin.leaves.destroy", data.id)
+                                    route("staff.appraisals.destroy", data.id)
                                 );
                         }}
                     />
-                    <EditButton href={route("admin.leaves.edit", data.id)} />
-                    <ViewButton href={route("admin.leaves.show", data.id)} />
+                    <EditButton
+                        href={route("staff.appraisals.edit", data.id)}
+                    />
+                    <ViewButton
+                        href={route("staff.appraisals.show", data.id)}
+                    />
                 </div>
             );
         },
