@@ -118,15 +118,7 @@ export default function Sidebar() {
                             >
                                 Appraisals
                             </SidebarLink>
-                            <SidebarLink href="/medicals" icon="fas fa-folder">
-                                Medical Records
-                            </SidebarLink>
-                            <SidebarLink
-                                href="/qualifications"
-                                icon="fas fa-folder"
-                            >
-                                Qualifications
-                            </SidebarLink>
+
                             <SidebarLink
                                 href="/appointments"
                                 icon="fas fa-folder"
