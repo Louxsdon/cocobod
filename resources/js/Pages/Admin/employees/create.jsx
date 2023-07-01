@@ -115,23 +115,6 @@ export default function create({ users, permissions, roles, departments }) {
                             </option>
                         ))}
                     </SelectInput>
-
-                    <SelectInput
-                        name="role"
-                        label="Role"
-                        error={errors}
-                        onChange={onChange}
-                        defaultValue=""
-                    >
-                        <option value="" disabled>
-                            ---- Select User Role ----
-                        </option>
-                        {roles?.map((role, i) => (
-                            <option key={i} value={role.id}>
-                                {role.name.toUpperCase()}
-                            </option>
-                        ))}
-                    </SelectInput>
                 </div>
 
                 <div className="mt-4">

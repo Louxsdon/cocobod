@@ -6,6 +6,7 @@ use App\Models\Department;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
@@ -51,13 +52,15 @@ class EmployeeController extends Controller
             "hired_on" => "required|date",
             "bio" => 'nullable|string|max:255',
             "user_id" => 'required|string|exists:users,id',
-            "role" => 'required|string|exists:roles,id',
             "department_id" => 'required|string|exists:departments,id',
 
         ]);
 
         // create new user
-        $user = Employee::create($validated);
+        DB::transaction(function () use ($validated) {
+            $user = Employee::create($validated);
+            $user->assignRole("employee");
+        });
 
         return to_route("admin.employees.index");
     }
