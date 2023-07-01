@@ -1,26 +1,27 @@
 <?php
 
-use App\Http\Controllers\AdminAppraisalController;
-use App\Http\Controllers\AdminIndexController;
-use App\Http\Controllers\AppointmentController as ControllersAppointmentController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\AuthorizationController;
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LeaveController;
-use App\Http\Controllers\AppointmentController as AdminAppointmentController;
-use App\Http\Controllers\Staff\AppointmentController;
-use App\Http\Controllers\Staff\AppraisalController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\AdminIndexController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Staff\IndexController;
-use App\Http\Controllers\Staff\LeaveController as StaffLeaveController;
+use App\Http\Controllers\AuthorizationController;
+use App\Http\Controllers\AdminAppraisalController;
 use App\Http\Controllers\Staff\MedicalsController;
+use App\Http\Controllers\Staff\AppraisalController;
+use App\Http\Controllers\Staff\AppointmentController;
+use App\Http\Controllers\Staff\StaffProfileController;
 use App\Http\Controllers\Staff\QualificationController;
+use App\Http\Controllers\Staff\LeaveController as StaffLeaveController;
+use App\Http\Controllers\AppointmentController as AdminAppointmentController;
+use App\Http\Controllers\AppointmentController as ControllersAppointmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,10 @@ Route::get('/', function () {
     ]);
 });
 
+// Route::middleware(['auth', 'verified'])->prefix('/profile')->name('profile.')->group(function () {
+//     Route::get('me', [ProfileController::class, "edit"])->name("me");
+// });
+
 Route::middleware(['auth', 'verified', 'role:admin|super-admin'])->prefix('/admin')->name('admin.')->group(function () {
     Route::resource('users', UserController::class);
     Route::post('users/{user}/roles', [UserController::class, 'syncRoles'])->name('users.roles');
@@ -73,6 +78,8 @@ Route::middleware(['auth', 'verified', 'role:admin|super-admin'])->prefix('/admi
 
     Route::resource('appointments', AdminAppointmentController::class);
 
+    Route::get('profile/me', [ProfileController::class, "edit"])->name("profile.me");
+
     // roles and permissions
     Route::resource('roles', RoleController::class);
     Route::post('roles/{role}', [RoleController::class, 'addPermissions'])
@@ -92,6 +99,8 @@ Route::middleware(['auth', 'verified', 'role:staff|employee'])->prefix('/staff')
     Route::resource('qualifications', QualificationController::class);
     Route::resource('medicals', MedicalsController::class);
     Route::resource('appointments', AppointmentController::class);
+
+    Route::get('profile/me', [StaffProfileController::class, "edit"])->name("profile.me");
 });
 
 Route::middleware('auth')->group(function () {
