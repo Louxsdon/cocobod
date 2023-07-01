@@ -73,4 +73,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Appraisal::class);
     }
+    public function department()
+    {
+        return $this->hasOne(Department::class);
+    }
 }

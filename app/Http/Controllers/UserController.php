@@ -10,6 +10,7 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Validation\Rules\Password;
 
@@ -33,7 +34,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return inertia("Admin/users/create");
+        $roles = Role::all();
+        return inertia("Admin/users/create", compact("roles"));
     }
 
     /**
@@ -49,21 +51,36 @@ class UserController extends Controller
             "email" => 'required|string|email|max:255|unique:users',
             "phone" => "required|string|max:13",
             'password' => ['required', 'confirmed', Password::defaults()],
+            'role' => 'required|string|exists:roles,name',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'
+
 
         ]);
 
         // create new user
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-        ]);
+        DB::transaction(function () use ($request) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => Hash::make($request->password),
+            ]);
 
+            $user->assignRole($request->role);
 
-        event(new Registered($user));
+            if ($request->hasFile('photo')) {
+                $photo = $request->file('photo');
+                $file_name = time() . '-' . $photo->getClientOriginalName();
 
-        return to_route("admin.users.index");
+                $user->photo = $file_name;
+                $photo->move(public_path('photos'), $file_name);
+                $user->save();
+            }
+
+            event(new Registered($user));
+        });
+
+        return to_route("admin.users.index")->with('message', ["text" => "User added successfully!"]);
     }
 
     /**
@@ -72,9 +89,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        $user->load(["department", "qualifications", "employee.department", "roles"]);
+        return inertia("Admin/users/show", compact("user"));
     }
 
     /**
@@ -112,15 +130,32 @@ class UserController extends Controller
             "name" => "required|max:255",
             "email" => 'required|string|email|max:255',
             "phone" => "required|string|max:13",
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'
         ]);
 
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-        ]);
 
-        return to_route("admin.users.index");
+        DB::transaction(function () use ($request, $user) {
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+            ]);
+
+            if ($request->hasFile('photo')) {
+                $photo = $request->file('photo');
+                $file_name = time() . '-' . $photo->getClientOriginalName();
+
+                $user->photo = $file_name;
+                $photo->move(public_path('photos'), $file_name);
+                $user->save();
+            }
+
+            event(new Registered($user));
+        });
+
+
+
+        return to_route("admin.users.index")->with('message', ["text" => "User updated successfully!"]);
     }
 
     /**
@@ -132,7 +167,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->back();
+        return redirect()->back()->with('message', ["text" => "User deleted successfully!"]);
     }
 
     public function syncRoles(Request $request, User $user)
@@ -142,7 +177,7 @@ class UserController extends Controller
         ]);
         $user->syncRoles($validate);
 
-        return redirect()->back();
+        return redirect()->back()->with('message', ["text" => "User role updated successfully!"]);
     }
 
     public function syncPermissions(Request $request, User $user)
@@ -152,6 +187,6 @@ class UserController extends Controller
         ]);
         $user->syncPermissions($validate);
 
-        return redirect()->back();
+        return redirect()->back()->with('message', ["text" => "User permissions updated successfully!"]);
     }
 }

@@ -2,20 +2,18 @@ import { useState, useEffect } from "react";
 import React from "react";
 import AuthLayout from "@/Layouts/AuthLayout";
 import Input from "@/Components/Input";
-import { useForm, router } from "@inertiajs/react";
+import { useForm, router, Link } from "@inertiajs/react";
 import SelectInput from "@/Components/SelectInput";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
+import FileInput from "@/Components/FileInput";
 
-export default function EditUser({
-    auth,
-    user = {},
-    roles = [],
-    permissions = [],
-}) {
-    const { put, errors, data, reset, setData } = useForm({
-        name: "",
-        phone: "",
-        email: "",
+export default function EditUser({ user = {}, roles = [], permissions = [] }) {
+    const { post, put, errors, data, reset, setData } = useForm({
+        name: user.name,
+        phone: user.phone,
+        email: user.email,
+        photo: null,
+        _method: "put",
     });
 
     function handleSubmit(e) {
@@ -33,27 +31,17 @@ export default function EditUser({
         const value = e.target.value;
         const newData = { ...data, [name]: value };
 
-        if (name === "name" || name === "slug") {
-            const newSlug = generateSlug(value);
-            newData.slug = newSlug;
-        }
-
         setData(newData);
     }
 
     function handleSubmit(e) {
         e.preventDefault();
         console.log(data);
-        put(route("admin.users.update", { user: user.id }), {
+        post(route("admin.users.update", user.id), {
             onSuccess: () => reset(),
-            onError: () => console.log(errors),
+            onError: (err) => console.log(err),
         });
     }
-
-    useEffect(() => {
-        setData(user);
-        console.log(user);
-    }, []);
 
     return (
         <>
@@ -62,6 +50,12 @@ export default function EditUser({
                 <hr className="my-2" />
                 {/* Form section */}
                 <form>
+                    <div className="mb-4 flex items-center overflow-hidden border hover:scale-105 transition-all duration-150 bg-slate-200 rounded-md w-[150px] h-[150px]">
+                        <img
+                            src={"/photos/" + user?.photo}
+                            alt={`${user.name} - Photo`}
+                        />
+                    </div>
                     <div className="col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
                         <Input
                             label="Name"
@@ -87,12 +81,34 @@ export default function EditUser({
                             onChange={onChange}
                             defaultValue={user.email}
                         />
+                        <div className="">
+                            <FileInput
+                                label="Profile Photo"
+                                name="photo"
+                                type="file"
+                                error={errors}
+                                onChange={(e) => {
+                                    console.log({ data, user });
+                                    setData({
+                                        ...data,
+                                        [e.target.name]: e.target.files[0],
+                                    });
+                                }}
+                            />
+                            {user?.photo && (
+                                <a
+                                    target="_"
+                                    className="text-blue-700"
+                                    href={`/photos/${user.photo}`}
+                                >{`Photo: ${user.photo}`}</a>
+                            )}
+                        </div>
                     </div>
 
                     <div className="mt-4">
                         <button
                             onClick={handleSubmit}
-                            className="btn !px-8 bg-orange-400 text-orange-100"
+                            className="btn btn-warning !px-8 bg-orange-400 text-orange-100"
                         >
                             Update
                         </button>

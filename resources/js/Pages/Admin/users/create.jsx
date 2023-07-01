@@ -5,25 +5,23 @@ import Input from "@/Components/Input";
 import { generateSlug } from "@/lib/utils";
 import SelectInput from "@/Components/SelectInput";
 import DashboardLayout from "@/Layouts/DashboardLayout";
+import FileInput from "@/Components/FileInput";
 
-export default function create() {
+export default function create({ roles }) {
     const { post, data, errors, setData, reset } = useForm({
         name: "",
         phone: "",
         email: "",
         password: "",
         password_confirmation: "",
+        role: "",
+        photo: null,
     });
 
     function onChange(e) {
         const name = e.target.name;
         const value = e.target.value;
         const newData = { ...data, [name]: value };
-
-        if (name === "name" || name === "slug") {
-            const newSlug = generateSlug(value);
-            newData.slug = newSlug;
-        }
 
         setData(newData);
     }
@@ -80,11 +78,39 @@ export default function create() {
                         error={errors}
                         onChange={onChange}
                     />
+                    <FileInput
+                        label="Profile Photo"
+                        name="photo"
+                        type="file"
+                        error={errors}
+                        onChange={(e) => {
+                            setData({
+                                ...data,
+                                [e.target.name]: e.target.files[0],
+                            });
+                        }}
+                    />
+                    <SelectInput
+                        name="role"
+                        label="Role"
+                        error={errors}
+                        onChange={onChange}
+                        defaultValue=""
+                    >
+                        <option value="" disabled>
+                            ---- Select User Role ----
+                        </option>
+                        {roles?.map((role, i) => (
+                            <option key={i} value={role.name}>
+                                {role.name.toUpperCase()}
+                            </option>
+                        ))}
+                    </SelectInput>
                 </div>
 
                 <button
                     onClick={handleSubmit}
-                    className="btn mt-3 text-green-100 bg-green-600 fluid"
+                    className="btn btn-success mt-3 text-green-100 bg-green-600 fluid"
                 >
                     Add User
                 </button>
