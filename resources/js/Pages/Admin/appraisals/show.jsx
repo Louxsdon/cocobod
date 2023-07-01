@@ -2,55 +2,153 @@ import { useState, useEffect } from "react";
 import React from "react";
 import AuthLayout from "@/Layouts/AuthLayout";
 import Input from "@/Components/Input";
-import { useForm, router, Link } from "@inertiajs/react";
+import { useForm, router } from "@inertiajs/react";
 import SelectInput from "@/Components/SelectInput";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
+import dayjs from "dayjs";
 import TextareaInput from "@/Components/TextareaInput";
 import { cn } from "@/lib/utils";
-import { DeleteButton } from "@/Components/Buttons";
 
-function BioInfo({ title, value, className }) {
-    return (
-        <div className={cn(!value && "hidden", className)}>
-            <h3 className="font-semibold text-lg text-slate-600">{title}:</h3>
-            <p className="text-lg font-thin ">{value}</p>
-        </div>
-    );
-}
+export default function EditUser({ appraisal = {} }) {
+    const { put, errors, data, reset, setData } = useForm({
+        question1: "",
+        question1_answer: "",
+        question2: "",
+        question2_answer: "",
+        question3: "",
+        question3_answer: "",
+        question4: "",
+        question4_answer: "",
+        question5: "",
+        question5_answer: "",
+        question6: "",
+        question6_answer: "",
+        question7: "",
+        question7_answer: "",
+        question8: "",
+        question8_answer: "",
+        question9: "",
+        question9_answer: "",
+        question10: "",
+        question10_answer: "",
+    });
 
-export default function ShowUser({ leaf = {} }) {
-    console.log(leaf);
+    function onChange(e) {
+        const name = e.target.name;
+        const value = e.target.value;
+        const newData = { ...data, [name]: value };
+
+        setData(newData);
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        console.log(data);
+        put(route("staff.appraisals.update", { appraisal: appraisal.id }), {
+            onSuccess: () => reset(),
+            onError: () => console.log(errors),
+        });
+    }
+
+    useEffect(() => {
+        setData(appraisal);
+        console.log(appraisal);
+    }, []);
+
     return (
-        <>
-            <div className="p-5 dark bg-white w-full md:w-3/4 lg:w-2/4 mx-auto mt-16 shadow-sm rounded-lg">
-                <p className="text-xl font-semibold">Leave Information</p>
-                <hr className="my-2 mb-8" />
-                {/* Form section */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
-                    <BioInfo title="Heading" value={leaf.heading} />
-                    <BioInfo title="Reason" value={leaf.reason} />
-                    <BioInfo title="From" value={leaf.from} />
-                    <BioInfo title="To" value={leaf.to} />
-                    <BioInfo title="Type" value={leaf.type} />
-                    <BioInfo
-                        title="Status"
-                        value={leaf.status}
-                        className={`capitalize ${
-                            leaf.status === "pending"
-                                ? "text-blue-500"
-                                : leaf.status === "approved"
-                                ? "text-green-600"
-                                : "text-red-500"
-                        }`}
-                    />
+        <div className={`flex justify-center items-center h-full `}>
+            <div className={`dark bg-white w-[70%] p-4 rounded-lg`}>
+                <fieldset className="border p-4">
+                    <legend className="text-xl px-4 font-bold">{`Appraisal for ${dayjs(
+                        appraisal.created_at
+                    ).format("MMMM YYYY")}`}</legend>
+
+                    <form autoComplete="on">
+                        <div className="col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
+                            <MutiChoise
+                                question={data.question1}
+                                question_name={"question1_answer"}
+                                onChange={onChange}
+                                defaultValue={data.question1_answer}
+                            />
+                            <MutiChoise
+                                question={data.question2}
+                                question_name={"question2_answer"}
+                                onChange={onChange}
+                                defaultValue={data.question2_answer}
+                            />
+                            <MutiChoise
+                                question={data.question3}
+                                question_name={"question3_answer"}
+                                onChange={onChange}
+                                defaultValue={data.question3_answer}
+                            />
+                            <MutiChoise
+                                question={data.question4}
+                                question_name={"question4_answer"}
+                                onChange={onChange}
+                                defaultValue={data.question4_answer}
+                            />
+                            <MutiChoise
+                                question={data.question5}
+                                question_name={"question5_answer"}
+                                onChange={onChange}
+                                defaultValue={data.question5_answer}
+                            />
+                            <Input
+                                label={data.question6}
+                                name={"question6_answer"}
+                                error={errors}
+                                onChange={onChange}
+                                defaultValue={appraisal.question6_answer}
+                                disabled
+                                className="disabled:cursor-default disabled:bg-slate-50"
+                            />
+                            <Input
+                                label={data.question7}
+                                name={"question7_answer"}
+                                error={errors}
+                                onChange={onChange}
+                                defaultValue={appraisal.question7_answer}
+                                disabled
+                                className="disabled:cursor-default disabled:bg-slate-50"
+                            />
+                            <Input
+                                label={data.question8}
+                                name={"question8_answer"}
+                                error={errors}
+                                onChange={onChange}
+                                defaultValue={appraisal.question8_answer}
+                                disabled
+                                className="disabled:cursor-default disabled:bg-slate-50"
+                            />
+                            <Input
+                                label={data.question9}
+                                name={"question9_answer"}
+                                error={errors}
+                                onChange={onChange}
+                                defaultValue={appraisal.question9_answer}
+                                disabled
+                                className="disabled:cursor-default disabled:bg-slate-50"
+                            />
+                            <TextareaInput
+                                label={data.question10}
+                                name={"question10_answer"}
+                                error={errors}
+                                onChange={onChange}
+                                defaultValue={appraisal.question10_answer}
+                                disabled
+                                className="disabled:cursor-default disabled:bg-slate-50"
+                            />
+                        </div>
+                    </form>
 
                     <fieldset className="border p-3 rounded col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
-                        <legend className="px-2">Requested By</legend>
-                        <BioInfo title="Name" value={leaf.user?.name} />
-                        <BioInfo title="Email" value={leaf.user?.email} />
-                        <BioInfo title="Phone" value={leaf.user?.phone} />
+                        <legend className="px-2">Submitted By</legend>
+                        <BioInfo title="Name" value={appraisal.user?.name} />
+                        <BioInfo title="Email" value={appraisal.user?.email} />
+                        <BioInfo title="Phone" value={appraisal.user?.phone} />
                     </fieldset>
-                    {leaf.status === "pending" && (
+                    {appraisal.status === "submitted" && (
                         <div className="p-3 rounded col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
                             <button
                                 onClick={() =>
@@ -58,7 +156,10 @@ export default function ShowUser({ leaf = {} }) {
                                         "Are sure you want to reject this?"
                                     ) &&
                                     router.post(
-                                        route("admin.leaves.reject", leaf.id)
+                                        route(
+                                            "admin.appraisals.reject",
+                                            appraisal.id
+                                        )
                                     )
                                 }
                                 className="py-1 px-2 rounded text-center bg-red-200 text-red-500  hover:text-red-200 hover:bg-red-500 transition-colors duration-500"
@@ -74,7 +175,10 @@ export default function ShowUser({ leaf = {} }) {
                                         "Are sure you want to approve this?"
                                     ) &&
                                     router.post(
-                                        route("admin.leaves.approve", leaf.id)
+                                        route(
+                                            "admin.appraisals.approve",
+                                            appraisal.id
+                                        )
                                     )
                                 }
                                 className="py-1 px-2 rounded text-green-100 bg-green-500 text-center"
@@ -86,8 +190,49 @@ export default function ShowUser({ leaf = {} }) {
                             </button>
                         </div>
                     )}
-                </div>
+                </fieldset>
             </div>
-        </>
+        </div>
+    );
+}
+
+function MutiChoise({ question, question_name, onChange, defaultValue }) {
+    return (
+        <div>
+            <p>{question}</p>
+            <div className="flex space-x-12">
+                <article>
+                    <p
+                        name={question_name}
+                        type="radio"
+                        onChange={onChange}
+                        className={`radio ${
+                            defaultValue === "yes" ? "bg-accent" : ""
+                        } border border-accent rounded mr-2`}
+                    />
+                    <label>Yes</label>
+                </article>
+                <article>
+                    <p
+                        name={question_name}
+                        type="radio"
+                        onChange={onChange}
+                        className={`radio ${
+                            defaultValue === "no" ? "bg-accent" : ""
+                        } border border-accent rounded mr-2`}
+                    />
+                    <label>No</label>
+                </article>
+            </div>
+        </div>
+    );
+}
+
+function BioInfo({ title, value, className }) {
+    return (
+        <div className={cn(!value && "hidden", className)}>
+            <h3 className="font-semibold text-lg text-slate-600">{title}:</h3>
+            <p className="text-lg font-thin ">{value}</p>
+        </div>
     );
 }

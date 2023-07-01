@@ -4,7 +4,8 @@ import { DataTable } from "../../../Components/ui/DataTable";
 import { columns } from "./partials/TableColumns";
 import { Link } from "@inertiajs/react";
 
-export default function Users({ leaves = [] }) {
+export default function Users({ appraisals = [] }) {
+    console.log(appraisals);
     return (
         <>
             <div className="my-12 container mx-auto">
@@ -12,18 +13,18 @@ export default function Users({ leaves = [] }) {
                     <div className="table-section bg-white drop-shadow-sm m-auto px-4 py-5 mt-20  border rounded-md">
                         <div className="flex justify-between">
                             <h3 className="font-bold text-xl text-slate-600">
-                                Leaves Management
+                                My Appraisals
                             </h3>
                             <Link
-                                href={route("admin.leaves.create")}
+                                href={route("admin.appraisals.create")}
                                 className="btn btn-primary flex items-center"
                             >
                                 <FaPlus className="mr-2 inline-block" />
-                                Leave Request
+                                Fill Appraisal
                             </Link>
                         </div>
 
-                        <DataTable columns={columns} data={leaves} />
+                        <DataTable columns={columns} data={appraisals} />
                     </div>
                 </div>
             </div>

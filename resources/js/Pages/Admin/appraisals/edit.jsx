@@ -4,38 +4,37 @@ import AuthLayout from "@/Layouts/AuthLayout";
 import Input from "@/Components/Input";
 import { useForm, router } from "@inertiajs/react";
 import SelectInput from "@/Components/SelectInput";
+import dayjs from "dayjs";
+import TextareaInput from "@/Components/TextareaInput";
 
-export default function EditUser({
-    auth,
-    user = {},
-    roles = [],
-    permissions = [],
-}) {
+export default function EditUser({ appraisal = {} }) {
     const { put, errors, data, reset, setData } = useForm({
-        name: "",
-        phone: "",
-        email: "",
+        question1: "",
+        question1_answer: "",
+        question2: "",
+        question2_answer: "",
+        question3: "",
+        question3_answer: "",
+        question4: "",
+        question4_answer: "",
+        question5: "",
+        question5_answer: "",
+        question6: "",
+        question6_answer: "",
+        question7: "",
+        question7_answer: "",
+        question8: "",
+        question8_answer: "",
+        question9: "",
+        question9_answer: "",
+        question10: "",
+        question10_answer: "",
     });
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        put(route("admin.roles.update", { role: user.id }), {
-            onSuccess: () => {
-                reset();
-            },
-        });
-        console.log("Data: ", data);
-    }
 
     function onChange(e) {
         const name = e.target.name;
         const value = e.target.value;
         const newData = { ...data, [name]: value };
-
-        if (name === "name" || name === "slug") {
-            const newSlug = generateSlug(value);
-            newData.slug = newSlug;
-        }
 
         setData(newData);
     }
@@ -43,340 +42,146 @@ export default function EditUser({
     function handleSubmit(e) {
         e.preventDefault();
         console.log(data);
-        put(route("admin.users.update", { user: user.id }), {
+        put(route("admin.appraisals.update", { appraisal: appraisal.id }), {
             onSuccess: () => reset(),
             onError: () => console.log(errors),
         });
     }
 
     useEffect(() => {
-        setData(user);
-        console.log(user);
+        setData(appraisal);
+        console.log(appraisal);
     }, []);
 
     return (
-        <>
-            <div className="p-5 dark bg-white w-2/4 mx-auto mt-24 shadow-sm rounded-lg">
-                <p className="text-xl font-semibold">Update User Account</p>
-                <hr className="my-2" />
-                {/* Form section */}
-                <form>
-                    <div className="col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
-                        <Input
-                            label="Name"
-                            name="name"
-                            placeholder="Enter your name"
-                            error={errors}
-                            onChange={onChange}
-                            defaultValue={user.name}
-                        />
-                        <Input
-                            label="Phone Number"
-                            name="phone"
-                            placeholder="Enter your number"
-                            error={errors}
-                            onChange={onChange}
-                            defaultValue={user.phone}
-                        />
-                        <Input
-                            label="Email Address"
-                            name="email"
-                            placeholder="Enter your email"
-                            error={errors}
-                            onChange={onChange}
-                            defaultValue={user.email}
-                        />
-                    </div>
+        <div className={`flex justify-center items-center h-full `}>
+            <div className={`dark bg-white w-[70%] p-4 rounded-lg`}>
+                <fieldset className="border p-4">
+                    <legend className="text-xl px-4 font-bold">{`Update Appraisal for ${dayjs(
+                        appraisal.created_at
+                    ).format("MMMM YYYY")}`}</legend>
 
-                    <div className="mt-4">
+                    <form autoComplete="on">
+                        <div className="col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
+                            <MutiChoise
+                                question={data.question1}
+                                question_name={"question1_answer"}
+                                onChange={onChange}
+                                defaultValue={data.question1_answer}
+                            />
+                            <MutiChoise
+                                question={data.question2}
+                                question_name={"question2_answer"}
+                                onChange={onChange}
+                                defaultValue={data.question2_answer}
+                            />
+                            <MutiChoise
+                                question={data.question3}
+                                question_name={"question3_answer"}
+                                onChange={onChange}
+                                defaultValue={data.question3_answer}
+                            />
+                            <MutiChoise
+                                question={data.question4}
+                                question_name={"question4_answer"}
+                                onChange={onChange}
+                                defaultValue={data.question4_answer}
+                            />
+                            <MutiChoise
+                                question={data.question5}
+                                question_name={"question5_answer"}
+                                onChange={onChange}
+                                defaultValue={data.question5_answer}
+                            />
+                            <Input
+                                label={data.question6}
+                                name={"question6_answer"}
+                                error={errors}
+                                onChange={onChange}
+                                defaultValue={appraisal.question6_answer}
+                            />
+                            <Input
+                                label={data.question7}
+                                name={"question7_answer"}
+                                error={errors}
+                                onChange={onChange}
+                                defaultValue={appraisal.question7_answer}
+                            />
+                            <Input
+                                label={data.question8}
+                                name={"question8_answer"}
+                                error={errors}
+                                onChange={onChange}
+                                defaultValue={appraisal.question8_answer}
+                            />
+                            <Input
+                                label={data.question9}
+                                name={"question9_answer"}
+                                error={errors}
+                                onChange={onChange}
+                                defaultValue={appraisal.question9_answer}
+                            />
+                            <TextareaInput
+                                label={data.question10}
+                                name={"question10_answer"}
+                                error={errors}
+                                onChange={onChange}
+                                defaultValue={appraisal.question10_answer}
+                            />
+                            {/* <SelectInput
+                        name="type"
+                        label="Type"
+                        error={errors}
+                        onChange={onChange}
+                        defaultValue={data.question1_answer}
+                        defaultValue={data.type}
+                    >
+                        <option value="Paid">Paid</option>
+                        <option value="Non-Paid">Non Paid</option>
+                    </SelectInput> */}
+                        </div>
+
                         <button
                             onClick={handleSubmit}
-                            className="btn !px-8 bg-orange-400 text-orange-100"
+                            className="btn btn-warning mt-3 fluid"
                         >
-                            Update
+                            Update Appraisal
                         </button>
-                    </div>
-                </form>
+                    </form>
+                </fieldset>
             </div>
-
-            {/* Roles and User Roles */}
-            <Roles user={user} roles={roles} />
-
-            {/* ================ Permissions ============*/}
-            <Permissions user={user} permissions={permissions} />
-        </>
-    );
-}
-
-// Roles Section Component
-
-export function Roles({ user = {}, roles: all_roles = [], user_roles = [] }) {
-    const { put, errors, data, reset, setData } = useForm({
-        name: "",
-    });
-    const [roles, setRoles] = useState([]);
-    const [userRoles, setUserRoles] = useState([]);
-    const [selectedRoles, setSelectedRoles] = useState([]);
-    const [removedRoles, setRemovedRoles] = useState([]);
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        put(route("admin.roles.update", { role: user.id }), {
-            onSuccess: () => {
-                reset();
-            },
-        });
-        console.log("Data: ", data);
-    }
-
-    function onAddPermissionChange(e) {
-        const val = Array.from(e.target.selectedOptions, (v) => v.value);
-        setSelectedRoles([...val]);
-    }
-
-    function addRolePermissions() {
-        setUserRoles([...userRoles, ...selectedRoles]);
-        setSelectedRoles([]);
-    }
-
-    function onRemovePermissionChange(e) {
-        const val = Array.from(e.target.selectedOptions, (v) => v.value);
-        setRemovedRoles([...removedRoles, ...val]);
-    }
-
-    function removeRolePermissions() {
-        setUserRoles(
-            userRoles.filter((permission) => !removedRoles.includes(permission))
-        );
-        setRemovedRoles([]);
-    }
-
-    function saveUserRoles() {
-        router.post(
-            route("admin.users.roles", user.id),
-            { roles: userRoles },
-            {
-                onSuccess: (res) => console.log(res),
-                onError: (err) => console.log(err),
-            }
-        );
-        console.log("RolePermissions: ", userRoles);
-        console.log("selectedRolePermissions: ", selectedRoles);
-        console.log("removedRolePermissions: ", removedRoles);
-    }
-
-    useEffect(() => {
-        setRoles(all_roles);
-        setUserRoles(user.roles.map((r) => r.name));
-    }, [all_roles]);
-
-    return (
-        //  ================ Roles ============*
-        <div className="p-5 dark bg-white w-2/4 mx-auto mt-4 shadow-sm rounded-lg">
-            <p className="text-lg font-semibold">Assign User Roles</p>
-
-            <hr className=" my-2" />
-            {/* Form section */}
-            <form onSubmit={(e) => e.preventDefault()}>
-                <section className="flex space-x-2">
-                    <div className="w-full">
-                        <SelectInput
-                            name="roles"
-                            label="Roles"
-                            error={errors}
-                            placeholder="Enter role name"
-                            containerClassName="!w-full"
-                            // value={data}
-                            multiple={true}
-                            onChange={onAddPermissionChange}
-                        >
-                            {roles.map((role, i) => {
-                                const roleExist = userRoles.some(
-                                    (r) => r === role.name
-                                );
-
-                                if (!roleExist) {
-                                    return (
-                                        <option key={i} value={role.name}>
-                                            {role.name}
-                                        </option>
-                                    );
-                                }
-                            })}
-                        </SelectInput>
-                        <button
-                            onClick={addRolePermissions}
-                            className="bg-base-100 w-full"
-                        >
-                            Add
-                        </button>
-                    </div>
-                    <div className="w-full">
-                        <SelectInput
-                            onChange={onRemovePermissionChange}
-                            name="name"
-                            label="Assigned Roles"
-                            error={errors}
-                            multiple={true}
-                        >
-                            {userRoles.map((perm, i) => (
-                                <option key={i} value={perm}>
-                                    {perm}
-                                </option>
-                            ))}
-                        </SelectInput>
-                        <button
-                            onClick={removeRolePermissions}
-                            className="bg-base-100 w-full"
-                        >
-                            Remove
-                        </button>
-                    </div>
-                </section>
-                <div className="mt-4">
-                    <button
-                        onClick={saveUserRoles}
-                        className="btn !px-8 bg-green-500 text-green-100"
-                    >
-                        Apply
-                    </button>
-                </div>
-            </form>
         </div>
     );
 }
 
-export function Permissions({ user = {}, permissions: all_permissions = [] }) {
-    const { put, errors, data, reset, setData } = useForm({
-        name: "",
-    });
-    const [permissions, setPermissions] = useState([]);
-    const [userPermissions, setUserPermissions] = useState([]);
-    const [selectedPermissions, setSelectedPermissions] = useState([]);
-    const [removedPermissions, setRemovedPermissions] = useState([]);
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        put(route("admin.roles.update", { role: user.id }), {
-            onSuccess: () => {
-                reset();
-            },
-        });
-        console.log("Data: ", data);
-    }
-
-    function onAddPermissionChange(e) {
-        const val = Array.from(e.target.selectedOptions, (v) => v.value);
-        setSelectedPermissions([...val]);
-    }
-
-    function addUserPermissions() {
-        setUserPermissions([...userPermissions, ...selectedPermissions]);
-        setSelectedPermissions([]);
-    }
-
-    function onRemovePermissionChange(e) {
-        const val = Array.from(e.target.selectedOptions, (v) => v.value);
-        setRemovedPermissions([...removedPermissions, ...val]);
-    }
-
-    function removeUserPermissions() {
-        setUserPermissions(
-            userPermissions.filter(
-                (permission) => !removedPermissions.includes(permission)
-            )
-        );
-        setRemovedPermissions([]);
-    }
-
-    function saveUserPermissions() {
-        router.post(
-            route("admin.users.permissions", user.id),
-            { permissions: userPermissions },
-            {
-                onSuccess: (res) => console.log(res),
-                onError: (err) => console.log(err),
-            }
-        );
-        console.log("RolePermissions: ", userPermissions);
-        console.log("selectedRolePermissions: ", selectedPermissions);
-        console.log("removedRolePermissions: ", removedPermissions);
-    }
-
-    useEffect(() => {
-        setPermissions(all_permissions);
-        setUserPermissions(user.permissions.map((p) => p.name));
-    }, [all_permissions]);
-
+function MutiChoise({ question, question_name, onChange, defaultValue }) {
     return (
-        //  ================ Roles ============*
-        <div className="p-5 dark bg-white w-2/4 mx-auto mt-4 shadow-sm rounded-lg">
-            <p className="text-lg font-semibold">Assign User Permissions</p>
-
-            <hr className=" my-2" />
-            {/* Form section */}
-            <form onSubmit={(e) => e.preventDefault()}>
-                <section className="flex space-x-2">
-                    <div className="w-full">
-                        <SelectInput
-                            label="Permissions"
-                            error={errors}
-                            placeholder="Enter permission name"
-                            containerClassName="!w-full"
-                            multiple={true}
-                            onChange={onAddPermissionChange}
-                        >
-                            {permissions.map((permision, i) => {
-                                const permissionExist = userPermissions.some(
-                                    (p) => p === permision.name
-                                );
-
-                                if (!permissionExist) {
-                                    return (
-                                        <option key={i} value={permision.name}>
-                                            {permision.name}
-                                        </option>
-                                    );
-                                }
-                            })}
-                        </SelectInput>
-                        <button
-                            onClick={addUserPermissions}
-                            className="bg-base-100 w-full"
-                        >
-                            Add
-                        </button>
-                    </div>
-                    <div className="w-full">
-                        <SelectInput
-                            onChange={onRemovePermissionChange}
-                            label="Assigned Permissions"
-                            error={errors}
-                            multiple={true}
-                        >
-                            {userPermissions.map((perm, i) => (
-                                <option key={i} value={perm}>
-                                    {perm}
-                                </option>
-                            ))}
-                        </SelectInput>
-                        <button
-                            onClick={removeUserPermissions}
-                            className="bg-base-100 w-full"
-                        >
-                            Remove
-                        </button>
-                    </div>
-                </section>
-                <div className="mt-4">
-                    <button
-                        onClick={saveUserPermissions}
-                        className="btn !px-8 bg-green-500 text-green-100"
-                    >
-                        Apply
-                    </button>
-                </div>
-            </form>
+        <div>
+            <p>{question}</p>
+            <div className="flex space-x-12">
+                <article>
+                    <input
+                        name={question_name}
+                        type="radio"
+                        value="yes"
+                        onChange={onChange}
+                        className="radio radio-accent rounded mr-2"
+                        checked={defaultValue === "yes"}
+                    />
+                    <label>Yes</label>
+                </article>
+                <article>
+                    <input
+                        name={question_name}
+                        type="radio"
+                        value="no"
+                        onChange={onChange}
+                        className="radio radio-accent rounded mr-2"
+                        checked={defaultValue === "no"}
+                    />
+                    <label>No</label>
+                </article>
+            </div>
         </div>
     );
 }
