@@ -4,8 +4,8 @@ import React from "react";
 
 // import CardLineChart from "@/Components/Cards/CardLineChart.jsx";
 // import CardBarChart from "@/Components/Cards/CardBarChart.jsx";
-import CardPageVisits from "@/Components/Cards/CardPageVisits.jsx";
-import CardSocialTraffic from "@/Components/Cards/CardSocialTraffic.jsx";
+import CardPageLeaves from "@/Components/Cards/CardPageVisits.jsx";
+import CardAppointments from "@/Components/Cards/CardSocialTraffic.jsx";
 import HeaderStats from "@/Components/Headers/HeaderStats";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import { cn } from "@/lib/utils";
