@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AdminAppraisalController;
+use App\Http\Controllers\AdminIndexController;
+use App\Http\Controllers\AppointmentController as ControllersAppointmentController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -11,6 +14,7 @@ use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\AppointmentController as AdminAppointmentController;
 use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\AppraisalController;
 use App\Http\Controllers\Staff\IndexController;
@@ -52,9 +56,7 @@ Route::middleware(['auth', 'verified', 'role:admin|super-admin'])->prefix('/admi
     Route::post('users/{user}/roles', [UserController::class, 'syncRoles'])->name('users.roles');
     Route::post('users/{user}/permissions', [UserController::class, 'syncPermissions'])
         ->name('users.permissions');
-    Route::get('dashboard', function () {
-        return Inertia::render('Admin/Dashboard');
-    });
+    Route::get('dashboard', [AdminIndexController::class, "index"])->name("dashboard");
 
 
     Route::resource('departments', DepartmentController::class);
@@ -65,7 +67,11 @@ Route::middleware(['auth', 'verified', 'role:admin|super-admin'])->prefix('/admi
     Route::post('leaves/{leave}/reject', [LeaveController::class, "reject"])->name("leaves.reject");
     Route::post('leaves/{leave}/approve', [LeaveController::class, "approve"])->name("leaves.approve");
 
-    Route::resource('appraisals', LeaveController::class);
+    Route::resource('appraisals', AdminAppraisalController::class);
+    Route::post('appraisals/{appraisal}/reject', [AdminAppraisalController::class, "reject"])->name("appraisals.reject");
+    Route::post('appraisals/{appraisal}/approve', [AdminAppraisalController::class, "approve"])->name("appraisals.approve");
+
+    Route::resource('appointments', AdminAppointmentController::class);
 
     // roles and permissions
     Route::resource('roles', RoleController::class);
