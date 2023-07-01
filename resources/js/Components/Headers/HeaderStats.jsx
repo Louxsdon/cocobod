@@ -8,7 +8,7 @@ export default function HeaderStats() {
     return (
         <>
             {/* Header */}
-            <div className="relative bg-indigo-400 md:pt-32 pb-32 pt-12">
+            <div className="relative bg-indigo-400 md:pt-20 pb-20 pt-12">
                 <div className="px-4 md:px-10 mx-auto w-full">
                     <div>
                         {/* Card stats */}
@@ -29,10 +29,7 @@ export default function HeaderStats() {
                                 <CardStats
                                     statSubtitle="NEW USERS"
                                     statTitle="2,356"
-                                    statArrow="down"
-                                    statPercent="3.48"
                                     statPercentColor="text-red-500"
-                                    statDescripiron="Since last week"
                                     statIconName="fas fa-chart-pie"
                                     statIconColor="bg-orange-500"
                                 />
@@ -41,7 +38,6 @@ export default function HeaderStats() {
                                 <CardStats
                                     statSubtitle="SALES"
                                     statTitle="924"
-                                    statArrow="down"
                                     statPercent="1.10"
                                     statPercentColor="text-orange-500"
                                     statDescripiron="Since yesterday"
