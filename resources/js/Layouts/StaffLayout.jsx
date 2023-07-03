@@ -8,6 +8,7 @@ import FooterAdmin from "@/Components/Footers/FooterAdmin.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import { usePage } from "@inertiajs/react";
 import EmployeeSidebar from "@/Components/Sidebar/EmployeeSidebar";
+import StaffNavbar from "@/Components/Navbars/StaffNavbar";
 
 // views
 
@@ -27,7 +28,7 @@ export default function StaffLayout({ children }) {
             <ToastContainer />
             <EmployeeSidebar />
             <div className="relative md:ml-64 bg-blueGray-100">
-                <AdminNavbar />
+                <StaffNavbar />
                 {/* Header */}
 
                 <div className="px-4 md:px-10 mx-auto w-full -m-24 md:pt-32 pb-32 pt-12">

@@ -22,12 +22,12 @@ export default function EmployeeSidebar() {
                         <i className="fas fa-bars"></i>
                     </button>
                     {/* Brand */}
-                    <div className="bg-indigo-20 py-5">
+                    <div className="bg-teal-20 py-5">
                         <Link
                             className="md:block md:pb-2 text-center text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
                             href="/admin/dashboard"
                         >
-                            <p className="font-black text-xl text-indigo-500">
+                            <p className="font-black text-xl text-teal-500">
                                 Cocobod
                             </p>
                             <p className="">Ghana </p>
@@ -88,7 +88,7 @@ export default function EmployeeSidebar() {
                         <hr className="my-4 md:min-w-full" />
                         {/* Heading */}
                         <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-                            Admin Section
+                            Staff Section
                         </h6>
                         {/* Navigation */}
 
@@ -167,7 +167,7 @@ function SidebarLink({ children, href, icon = "" }) {
                 className={
                     "text-xs uppercase px-3 py-3 rounded-lg font-bold block " +
                     (window.location.href.indexOf(href) !== -1
-                        ? " bg-indigo-100 text-indigo-500 hover:text-indigo-600"
+                        ? " bg-teal-100 text-teal-500 hover:text-teal-600"
                         : "text-blueGray-700 hover:text-blueGray-500")
                 }
                 href={`/staff${href}`}
