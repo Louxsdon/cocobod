@@ -3,7 +3,15 @@ import React from "react";
 import AuthLayout from "@/Layouts/AuthLayout";
 import Input from "@/Components/Input";
 import { useForm, router } from "@inertiajs/react";
-import SelectInput from "@/Components/SelectInput";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/Components/ui/table";
 
 export default function EditDepartment({ auth, department = {} }) {
     const { put, errors, data, reset, setData } = useForm({
@@ -63,8 +71,32 @@ export default function EditDepartment({ auth, department = {} }) {
             {/* Roles and User Roles */}
             <div className="p-5 dark bg-white w-2/4 mx-auto mt-4 shadow-sm rounded-lg">
                 <p className="text-lg font-semibold">
-                    Users in this Department
+                    Staffs in this Department
                 </p>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[100px]">Name</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Phone</TableHead>
+                            <TableHead className="text-right">Role</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {department?.employees?.map((emp, i) => (
+                            <TableRow key={i}>
+                                <TableCell className="font-medium">
+                                    {emp?.user?.name}
+                                </TableCell>
+                                <TableCell>{emp?.user?.email}</TableCell>
+                                <TableCell>{emp?.user?.phone}</TableCell>
+                                <TableCell className="text-right">
+                                    {emp?.job_title}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             </div>
         </>
     );

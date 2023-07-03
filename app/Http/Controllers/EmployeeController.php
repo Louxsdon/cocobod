@@ -57,8 +57,9 @@ class EmployeeController extends Controller
         ]);
 
         // create new user
-        DB::transaction(function () use ($validated) {
-            $user = Employee::create($validated);
+        DB::transaction(function () use ($validated, $request) {
+            $user = User::find($request->user_id);
+            Employee::create($validated);
             $user->assignRole("employee");
         });
 

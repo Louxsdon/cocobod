@@ -53,7 +53,7 @@ class DepartmentController extends Controller
      */
     public function edit(department $department)
     {
-        $employees = $department->employees;
+        $employees = $department->load("employees.user");
         return inertia("Admin/departments/edit", compact("department", "employees"));
     }
 
