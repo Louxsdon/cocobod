@@ -18,11 +18,9 @@ function BioInfo({ title, value, className }) {
 }
 
 export default function ShowUser({
-    auth,
     employee = {},
     roles = [],
     permissions = [],
-    departments = [],
 }) {
     return (
         <>
@@ -31,6 +29,12 @@ export default function ShowUser({
                 <hr className="my-2 mb-8" />
                 {/* Form section */}
                 <form>
+                    <div className="mb-4 flex items-center border overflow-hidden hover:scale-110 transition-all duration-150 bg-slate-200 rounded-md w-[150px] h-[150px]">
+                        <img
+                            src={"/photos/" + employee.user?.photo}
+                            alt={`${employee.user.name} - Photo`}
+                        />
+                    </div>
                     <div className="col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
                         <BioInfo title="Name" value={employee.user.name} />
                         <BioInfo title="Email" value={employee.user.email} />
