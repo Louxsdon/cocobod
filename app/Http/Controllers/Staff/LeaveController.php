@@ -13,7 +13,8 @@ class LeaveController extends Controller
      */
     public function index()
     {
-        $leaves = Leave::with("user")->orderBy("created_at", "desc")->get();
+        $user = request()->user();
+        $leaves = $user->leaves()->orderBy("created_at", "desc")->get();
         return inertia("Staff/leaves/index", compact('leaves'));
     }
 
