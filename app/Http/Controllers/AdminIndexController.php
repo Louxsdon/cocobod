@@ -16,8 +16,8 @@ class AdminIndexController extends Controller
     {
         $users = User::count();
         $employees = User::with("roles")->whereHas("roles", function ($query) {
-            return $query->where("name", "employee");
-        })->count();
+            return $query->where("name", "employee")->orWhere("name", "staff");
+        })->distinct()->count();
 
         $leaves = Leave::with("user")->where("status", "pending")->get();
         $leaves_count = $leaves->count();
