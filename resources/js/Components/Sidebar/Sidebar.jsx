@@ -102,12 +102,15 @@ export default function Sidebar() {
                             </SidebarLink>
                             <SidebarLink
                                 href="/departments"
-                                icon="fas fa-users"
+                                icon="fa-solid fa-grip"
                             >
                                 Departments
                             </SidebarLink>
-                            <SidebarLink href="/employees" icon="fas fa-users">
-                                Employees
+                            <SidebarLink
+                                href="/employees"
+                                icon="fa-solid fa-user-group"
+                            >
+                                Staffs
                             </SidebarLink>
                             <SidebarLink href="/leaves" icon="fas fa-folder">
                                 Manage Leaves

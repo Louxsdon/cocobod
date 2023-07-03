@@ -1,20 +1,18 @@
 import React from "react";
 
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.jsx";
+import { usePage } from "@inertiajs/react";
 
 export default function Navbar() {
+    const { auth } = usePage().props;
     return (
         <>
             {/* Navbar */}
             <nav className="bg-indigo-400 sticky top-0 left-0 w-full z-10 md:flex-row md:flex-nowrap md:justify-start flex items-center py-2 px-4">
                 <div className="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4">
                     {/* Brand */}
-                    <a
-                        className="text-white text-sm uppercase hidden lg:inline-block font-semibold"
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                    >
-                        Dashboard
+                    <a className="text-white text-sm uppercase hidden lg:inline-block font-semibold">
+                        Admin Dashboard
                     </a>
                     {/* Form */}
                     <form className="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3">
@@ -31,7 +29,15 @@ export default function Navbar() {
                     </form>
                     {/* User */}
                     <ul className="flex-col md:flex-row list-none items-center hidden md:flex">
-                        {/* <UserDropdown /> */}
+                        <div className="items-center flex">
+                            <span className="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
+                                <img
+                                    alt="..."
+                                    className="w-full rounded-full align-middle border-none shadow-lg"
+                                    src={`/photos/${auth.user?.photo}`}
+                                />
+                            </span>
+                        </div>
                     </ul>
                 </div>
             </nav>
