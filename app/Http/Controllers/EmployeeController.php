@@ -91,7 +91,7 @@ class EmployeeController extends Controller
 
         return inertia(
             "Admin/employees/show",
-            compact("employee", "departments", "roles", "permissions")
+            compact("employee", "departments", "roles", "permissions", "user")
         );
     }
 
