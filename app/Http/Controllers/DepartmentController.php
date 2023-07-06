@@ -44,8 +44,8 @@ class DepartmentController extends Controller
      */
     public function show(Department $department)
     {
-        $employees = $department->employees;
-        return inertia("Admin/departments/edit", compact("department", "employees"));
+        $department->load("employees.user");
+        return inertia("Admin/departments/show", compact("department"));
     }
 
     /**
@@ -53,8 +53,7 @@ class DepartmentController extends Controller
      */
     public function edit(department $department)
     {
-        $employees = $department->load("employees.user");
-        return inertia("Admin/departments/edit", compact("department", "employees"));
+        return inertia("Admin/departments/edit", compact("department"));
     }
 
     /**
