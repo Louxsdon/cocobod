@@ -19,7 +19,10 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::with(["department", "user"])->get();
+        $employees = User::with("roles", "employee.department")->whereHas("roles", function ($query) {
+            return $query->where("name", "employee")->orWhere("name", "staff");
+        })->get();
+        //  Employee::with(["department", "user"])->get();
         return inertia("Admin/employees/index", compact('employees'));
     }
 
@@ -29,11 +32,10 @@ class EmployeeController extends Controller
     public function create()
     {
         $roles = Role::all();
-        // $roles->permissions;
         $permissions = Permission::all();
-        $users = User::whereNotIn("id",  function ($query) {
-            $query->select('id')->from('employees');
-        })->get();
+        $users = User::whereDoesntHave("roles", function ($query) {
+            $query->where("name", "employee")->orWhere("name", "staff");
+        })->orDoesntHave("roles")->get();
         $departments = Department::all();
 
         return inertia("Admin/employees/create", compact("departments", "users", "roles", "permissions"));
@@ -60,7 +62,7 @@ class EmployeeController extends Controller
         DB::transaction(function () use ($validated, $request) {
             $user = User::find($request->user_id);
             Employee::create($validated);
-            $user->assignRole("employee");
+            $user->assignRole("staff");
         });
 
         return to_route("admin.employees.index");
