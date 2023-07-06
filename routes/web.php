@@ -66,6 +66,7 @@ Route::middleware(['auth', 'verified', 'role:admin|super-admin'])->prefix('/admi
 
     Route::resource('departments', DepartmentController::class);
 
+    Route::get('employees/create/{user?}', [EmployeeController::class, "create"])->name("employees.create");
     Route::resource('employees', EmployeeController::class);
 
     Route::resource('leaves', LeaveController::class)->parameter("leaf", "leave");

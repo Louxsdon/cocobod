@@ -98,7 +98,6 @@ export const columns = [
                         </>
                     ) : (
                         <>
-                            {" "}
                             <DeleteButton
                                 onClick={() => {
                                     confirm(
@@ -113,7 +112,7 @@ export const columns = [
                                 }}
                             />
                             <EditButton
-                                href={route("admin.employees.create")}
+                                href={"/admin/employees/create/" + staff.id}
                             />
                             <ViewButton
                                 href={route("admin.users.show", staff.id)}

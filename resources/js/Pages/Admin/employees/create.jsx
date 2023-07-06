@@ -16,7 +16,7 @@ export default function create({ users, permissions, roles, departments }) {
         hired_on: "",
         bio: "",
         department_id: "",
-        user_id: "",
+        user_id: users.length === 1 ? users[0].id.toString() : "",
     });
 
     function onChange(e) {
@@ -36,7 +36,7 @@ export default function create({ users, permissions, roles, departments }) {
     }
 
     return (
-        <DashboardLayout title="Add New Employee">
+        <DashboardLayout title="Add New Staff">
             <form>
                 <div className="col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
                     <SelectInput
@@ -44,6 +44,7 @@ export default function create({ users, permissions, roles, departments }) {
                         label="User"
                         error={errors}
                         onChange={onChange}
+                        defaultValue={data.user_id}
                     >
                         <option value="" disabled>
                             ---- Select User ----
@@ -122,7 +123,7 @@ export default function create({ users, permissions, roles, departments }) {
                         onClick={handleSubmit}
                         className="btn mt-3 text-green-100 bg-green-600 fluid"
                     >
-                        Add Employee
+                        Add Staff
                     </button>
                 </div>
             </form>

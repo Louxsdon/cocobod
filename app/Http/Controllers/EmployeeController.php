@@ -29,14 +29,22 @@ class EmployeeController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($user = null)
     {
         $roles = Role::all();
         $permissions = Permission::all();
-        $users = User::whereDoesntHave("roles", function ($query) {
-            $query->where("name", "employee")->orWhere("name", "staff");
-        })->orDoesntHave("roles")->get();
         $departments = Department::all();
+
+        $users = [];
+
+        if (isset($user)) {
+            $user = User::findOrFail($user);
+            $users[] = $user;
+        } else {
+            $users = User::whereDoesntHave("roles", function ($query) {
+                $query->where("name", "employee")->orWhere("name", "staff");
+            })->orDoesntHave("roles")->get();
+        }
 
         return inertia("Admin/employees/create", compact("departments", "users", "roles", "permissions"));
     }
@@ -76,6 +84,9 @@ class EmployeeController extends Controller
         $permissions = Permission::all();
         $roles = Role::all();
         $employee->load(["user.permissions", 'user.roles', 'department']);
+        $user = $employee->user;
+        $user->load(["qualifications", "medicals", "leaves", "appraisals", "appointments"]);
+
         $departments = Department::all();
 
         return inertia(
