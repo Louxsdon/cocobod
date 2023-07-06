@@ -34,14 +34,22 @@ class AuthenticatedSessionController extends Controller
 
         if ($request->authenticate()) {
             $auth_user = User::where("email", $request->email)->first();
-            $request->session()->regenerate();
+
+            if ($auth_user->hasAnyRole(["super-admin", 'admin', "staff", 'employee'])) {
+                $request->session()->regenerate();
+            } else {
+                Auth::guard('web')->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()->back()->with("message", ["text" => "You don't have permission to access this site!", "status" => "error"]);
+            }
 
             if ($auth_user->hasAnyRole(["super-admin", 'admin'])) {
                 return redirect()->intended("/admin/dashboard");
             } else if ($auth_user->hasAnyRole(["staff", 'employee'])) {
                 return redirect()->intended(route("staff.dashboard"));
             }
-            return redirect()->back()->with("message", "Sorry this account don't have permission to access this site!");
         };
 
         return redirect()->intended(RouteServiceProvider::HOME);
