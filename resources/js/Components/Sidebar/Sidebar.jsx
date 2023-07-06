@@ -4,9 +4,11 @@ import React from "react";
 import NotificationDropdown from "@/Components/Dropdowns/NotificationDropdown.jsx";
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.jsx";
 import { Link } from "@inertiajs/react";
+import { useAuthorization } from "@/lib/hooks";
 
 export default function Sidebar() {
     const [collapseShow, setCollapseShow] = React.useState("hidden");
+    const { hasRole } = useAuthorization();
     return (
         <>
             <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-3">
@@ -130,20 +132,24 @@ export default function Sidebar() {
                             </SidebarLink>
                         </ul>
 
-                        <hr className="my-4 md:min-w-full" />
-                        <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-                            Authorization
-                        </h6>
-                        {/* Navigation */}
+                        {hasRole("super-admin") && (
+                            <>
+                                <hr className="my-4 md:min-w-full" />
+                                <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                                    Authorization
+                                </h6>
 
-                        <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-                            <SidebarLink
-                                href="/authorizations"
-                                icon="fas fa-lock"
-                            >
-                                Roles & Permissions
-                            </SidebarLink>
-                        </ul>
+                                <ul className="md:flex-col md:min-w-full flex flex-col list-none">
+                                    <SidebarLink
+                                        href="/authorizations"
+                                        icon="fas fa-lock"
+                                    >
+                                        Roles & Permissions
+                                    </SidebarLink>
+                                </ul>
+                            </>
+                        )}
+                        {/* Navigation */}
 
                         {/* Divider */}
                         <hr className="my-4 md:min-w-full" />

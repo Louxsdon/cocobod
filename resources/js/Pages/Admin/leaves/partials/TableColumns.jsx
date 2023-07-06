@@ -3,6 +3,7 @@
 
 import { DeleteButton, EditButton, ViewButton } from "@/Components/Buttons";
 import { Button } from "@/Components/ui/button";
+import { useAuthorization } from "@/lib/hooks";
 import { router } from "@inertiajs/react";
 import { BiCheckCircle } from "react-icons/bi";
 import { IoCloseCircleOutline } from "react-icons/io5";
@@ -85,19 +86,22 @@ export const columns = [
         accessorKey: "actions",
         header: "Actions",
         cell: ({ cell }) => {
+            const { hasRole } = useAuthorization();
             const data = cell.row.original;
             return (
                 <div className="flex items-center space-x-2 w-2/3">
-                    <DeleteButton
-                        onClick={() => {
-                            confirm(
-                                "Are you sure you want to delete this item?"
-                            ) &&
-                                router.delete(
-                                    route("admin.leaves.destroy", data.id)
-                                );
-                        }}
-                    />
+                    {hasRole("super-admin") && (
+                        <DeleteButton
+                            onClick={() => {
+                                confirm(
+                                    "Are you sure you want to delete this item?"
+                                ) &&
+                                    router.delete(
+                                        route("admin.leaves.destroy", data.id)
+                                    );
+                            }}
+                        />
+                    )}
                     {/* <EditButton href={route("admin.leaves.edit", data.id)} /> */}
                     <ViewButton href={route("admin.leaves.show", data.id)} />
                 </div>
