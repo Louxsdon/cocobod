@@ -1,7 +1,7 @@
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-import { DeleteButton, EditButton } from "@/Components/Buttons";
+import { DeleteButton, EditButton, ViewButton } from "@/Components/Buttons";
 import { router } from "@inertiajs/react";
 
 export const permissionColumns = [
@@ -30,6 +30,9 @@ export const permissionColumns = [
                     />
                     <EditButton
                         href={route("admin.departments.edit", department.id)}
+                    />
+                    <ViewButton
+                        href={route("admin.departments.show", department.id)}
                     />
                 </div>
             );
