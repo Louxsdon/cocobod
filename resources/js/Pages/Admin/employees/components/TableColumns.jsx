@@ -12,7 +12,7 @@ export const columns = [
         header: "User ID",
     },
     {
-        accessorKey: "user",
+        accessorKey: "name",
         header: ({ column }) => {
             return (
                 <Button
@@ -26,18 +26,9 @@ export const columns = [
                 </Button>
             );
         },
-        cell: ({ cell }) => {
-            const employee = cell.row.original;
-            console.log(employee);
-            return (
-                <div className="flex items-center space-x-2 w-2/3">
-                    {employee.user.name}
-                </div>
-            );
-        },
     },
     {
-        accessorKey: "user.email",
+        accessorKey: "email",
         header: ({ column }) => {
             return (
                 <Button
@@ -53,42 +44,82 @@ export const columns = [
         },
     },
     {
-        accessorKey: "user.phone",
+        accessorKey: "phone",
         header: "Phone",
     },
     {
-        accessorKey: "job_title",
         header: "Job",
+        cell: ({ cell }) => {
+            const staff = cell.row.original;
+            return <span>{staff.employee?.job_title}</span>;
+        },
     },
     {
-        accessorKey: "department.name",
         header: "Department",
+        cell: ({ cell }) => {
+            const staff = cell.row.original;
+            return <span>{staff.employee?.department?.name}</span>;
+        },
     },
     {
         accessorKey: "actions",
         header: "Actions",
         cell: ({ cell }) => {
-            const employee = cell.row.original;
+            const staff = cell.row.original;
             return (
                 <div className="flex items-center space-x-2 w-2/3">
-                    <DeleteButton
-                        onClick={() => {
-                            confirm(
-                                "Are you sure you want to delete this item?"
-                            ) &&
-                                router.delete(
-                                    route("admin.employees.destroy", {
-                                        employee: employee.id,
-                                    })
-                                );
-                        }}
-                    />
-                    <EditButton
-                        href={route("admin.employees.edit", employee.id)}
-                    />
-                    <ViewButton
-                        href={route("admin.employees.show", employee.id)}
-                    />
+                    {staff.employee ? (
+                        <>
+                            <DeleteButton
+                                onClick={() => {
+                                    confirm(
+                                        "Are you sure you want to delete this item?"
+                                    ) &&
+                                        router.delete(
+                                            route(
+                                                "admin.employees.destroy",
+                                                staff?.employee?.id
+                                            )
+                                        );
+                                }}
+                            />
+                            <EditButton
+                                href={route(
+                                    "admin.employees.edit",
+                                    staff?.employee?.id
+                                )}
+                            />
+                            <ViewButton
+                                href={route(
+                                    "admin.employees.show",
+                                    staff?.employee?.id
+                                )}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            {" "}
+                            <DeleteButton
+                                onClick={() => {
+                                    confirm(
+                                        "Are you sure you want to delete this item?"
+                                    ) &&
+                                        router.delete(
+                                            route(
+                                                "admin.users.destroy",
+                                                staff.id
+                                            )
+                                        );
+                                }}
+                            />
+                            <EditButton
+                                href={route("admin.employees.create")}
+                            />
+                            <ViewButton
+                                href={route("admin.users.show", staff.id)}
+                            />
+                        </>
+                    )}
                 </div>
             );
         },
